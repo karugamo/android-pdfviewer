@@ -1,5 +1,6 @@
 package com.danjdt.pdfviewer.view
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
@@ -8,6 +9,7 @@ import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.ScaleGestureDetector.OnScaleGestureListener
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.GestureDetectorCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -144,5 +146,35 @@ class ZoomableRecyclerView @JvmOverloads constructor(
 
             return super.onSingleTapConfirmed(e)
         }
+
+        override fun onDoubleTap(e: MotionEvent): Boolean {
+
+            if (scaleFactor == MIN_ZOOM) {
+                animateZoomTo(e.x, e.y, scaleFactor, maxZoom) // Zoom in
+            } else {
+                animateZoomTo(tranX / (1 - scaleFactor), tranY / (1 - scaleFactor), scaleFactor, MIN_ZOOM) // Reset zoom
+            }
+            return true
+        }
+
+        private fun animateZoomTo(x: Float, y: Float, currentScale: Float, targetScale: Float) {
+            val animator = ValueAnimator.ofFloat(currentScale, targetScale)
+            animator.duration = 300 // Animation duration in milliseconds
+            animator.interpolator = AccelerateDecelerateInterpolator()
+            animator.addUpdateListener { animation ->
+                scaleFactor = animation.animatedValue as Float
+                // Recalculate max translations in case of a scale change
+                maxTranX = width * scaleFactor - width
+                maxTranY = height * scaleFactor - height
+                // Center the content
+                tranX = x * (1 - scaleFactor)
+                tranY = y * (1 - scaleFactor)
+                invalidate()
+            }
+            animator.start()
+        }
+
+
+
     }
 }
