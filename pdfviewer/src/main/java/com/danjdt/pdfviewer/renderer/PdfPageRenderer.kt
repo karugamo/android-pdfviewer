@@ -65,8 +65,12 @@ class PdfPageRenderer(
 
     private fun renderPage(position: Int): Bitmap {
         return pdfRenderer.openPage(position).use { page ->
+
             val width = quality.value
             val height = quality.value * page.height / page.width
+
+            println("render page ${page.index}, width $width, height $height")
+
             //Create a bitmap with pdf page dimensions
             val bitmap = Bitmap.createBitmap(
                 width,
@@ -76,6 +80,9 @@ class PdfPageRenderer(
 
             //Render the page onto the Bitmap.
             page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+
+            println("Rendered bitmap for ${page.index} bitmap height ${bitmap.height}, width ${bitmap.width}")
+
             bitmap
         }
     }

@@ -11,6 +11,7 @@ import com.danjdt.pdfviewer.utils.PdfPageQuality
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import java.io.File
 
 class PdfViewControllerImpl(
@@ -27,6 +28,7 @@ class PdfViewControllerImpl(
     override fun setup(file: File) {
         file.deleteOnExit()
         view.adapter = DefaultPdfPageAdapter(file, pageQuality, dispatcher, scope)
+
     }
 
     override fun setZoomEnabled(isZoomEnabled: Boolean) {

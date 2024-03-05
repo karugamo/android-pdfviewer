@@ -45,6 +45,7 @@ class ZoomableRecyclerView @JvmOverloads constructor(
 
     init {
         layoutManager = ZoomableLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(this)
     }

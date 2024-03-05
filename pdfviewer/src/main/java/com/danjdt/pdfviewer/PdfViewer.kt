@@ -28,7 +28,12 @@ class PdfViewer private constructor(
 
     private val context: Context by lazy { rootView.context }
 
+
+    val viewController: PdfViewController
+
+
     init {
+        viewController = pdfViewController
         try {
             rootView.addView(getView())
         } catch (e: IOException) {
@@ -105,7 +110,7 @@ class PdfViewer private constructor(
 
         private val context: Context = rootView.context
 
-        private var pdfViewController: PdfViewController = PdfViewControllerImpl(context, scope)
+        var pdfViewController: PdfViewController = PdfViewControllerImpl(context, scope)
 
         private var quality: PdfPageQuality = PdfPageQuality.QUALITY_1080
 

@@ -19,6 +19,7 @@ abstract class PdfPagesAdapter<T : PdfPageViewHolder>(
     }
 
     suspend fun renderPage(position: Int): Result<Bitmap> {
+        println("renderPage($position)")
         return pdfPageRenderer.render(position)
     }
 

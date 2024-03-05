@@ -25,6 +25,7 @@ class DefaultPdfPageViewHolder(
             ensureActive()
             renderResult.onSuccess { page ->
                 imageView.layoutParams.height =  (page.height.toDouble() * imageView.width / page.width).toInt()
+                println("imageView.set with bitmap ${page.height}/${page.width}")
                 imageView.setImageBitmap(page)
             }
         }

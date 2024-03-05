@@ -13,6 +13,8 @@ import com.danjdt.pdfviewer.interfaces.OnErrorListener
 import com.danjdt.pdfviewer.interfaces.OnPageChangedListener
 import com.danjdt.pdfviewer.utils.PdfPageQuality
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 
@@ -26,7 +28,7 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        PdfViewer.Builder(binding.rootView, lifecycleScope)
+        val view = PdfViewer.Builder(binding.rootView, lifecycleScope)
             .setMaxZoom(3f)
             .setZoomEnabled(true)
             .quality(PdfPageQuality.QUALITY_1440)
@@ -34,7 +36,16 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
             .setOnPageChangedListener(this)
             .setRenderDispatcher(Dispatchers.Default)
             .build()
-            .load(R.raw.sample)
+
+
+        lifecycleScope.launch {
+            delay(200)
+            view.viewController.goToPosition(10)
+            delay(300) // Asynchronous delay that does not block the main thread
+            view.viewController.goToPosition(0)
+        }
+
+        view.load(R.raw.sample)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
