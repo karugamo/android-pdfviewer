@@ -10,6 +10,8 @@ import android.view.ScaleGestureDetector
 import android.view.ScaleGestureDetector.OnScaleGestureListener
 import androidx.core.view.GestureDetectorCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 
 private const val DEFAULT_MAX_ZOOM = 3f
@@ -40,7 +42,9 @@ class ZoomableRecyclerView @JvmOverloads constructor(
     private var maxTranY = 0f
 
     init {
-        layoutManager = ZoomableLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        layoutManager = ZoomableLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(this)
     }
 
     fun calculateScrollAmount(dy: Int): Int {

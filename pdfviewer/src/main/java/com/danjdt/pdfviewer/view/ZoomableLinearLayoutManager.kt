@@ -38,4 +38,13 @@ class ZoomableLinearLayoutManager : LinearLayoutManager {
         val scrollAmount = this.recyclerView?.calculateScrollAmount(dy) ?: dy
         return super.scrollVerticallyBy(scrollAmount, recycler, state)
     }
+
+    override fun scrollHorizontallyBy(
+        dx: Int,
+        recycler: RecyclerView.Recycler?,
+        state: RecyclerView.State?,
+    ): Int {
+        val scrollAmount = this.recyclerView?.calculateScrollAmount(dx) ?: dx
+        return super.scrollHorizontallyBy(scrollAmount, recycler, state)
+    }
 }

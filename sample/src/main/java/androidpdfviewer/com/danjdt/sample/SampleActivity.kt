@@ -29,7 +29,7 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
         PdfViewer.Builder(binding.rootView, lifecycleScope)
             .setMaxZoom(3f)
             .setZoomEnabled(true)
-            .quality(PdfPageQuality.QUALITY_1080)
+            .quality(PdfPageQuality.QUALITY_1440)
             .setOnErrorListener(this)
             .setOnPageChangedListener(this)
             .setRenderDispatcher(Dispatchers.Default)
