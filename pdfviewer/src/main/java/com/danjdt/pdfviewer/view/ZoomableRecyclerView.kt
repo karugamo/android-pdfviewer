@@ -130,5 +130,19 @@ class ZoomableRecyclerView @JvmOverloads constructor(
             }
             return super.onScroll(e1, e2, distanceX, distanceY)
         }
+
+        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+            // Calculate the tap position relative to the scaled and translated PDF content
+            val scaledX = (e.x - tranX) / scaleFactor
+            val scaledY = (e.y - tranY) / scaleFactor
+
+            // Print out or use the relative position as needed
+            println("Tapped position relative to PDF: x=$scaledX, y=$scaledY")
+
+            // You might want to use this information for other purposes,
+            // such as selecting or interacting with specific elements within the PDF.
+
+            return super.onSingleTapConfirmed(e)
+        }
     }
 }
