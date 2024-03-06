@@ -25,6 +25,9 @@ class ZoomableLinearLayoutManager : LinearLayoutManager {
 
     override fun onAttachedToWindow(view: RecyclerView?) {
         super.onAttachedToWindow(view)
+
+        this.isItemPrefetchEnabled = false
+
         if (view is ZoomableRecyclerView) {
             this.recyclerView = view
         }

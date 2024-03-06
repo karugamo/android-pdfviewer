@@ -38,12 +38,12 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
             .build()
 
 
-        lifecycleScope.launch {
-            delay(200)
-            view.viewController.goToPosition(10)
-            delay(300) // Asynchronous delay that does not block the main thread
-            view.viewController.goToPosition(0)
-        }
+//        lifecycleScope.launch {
+//            delay(200)
+//            view.viewController.goToPosition(10)
+//            delay(300) // Asynchronous delay that does not block the main thread
+//            view.viewController.goToPosition(0)
+//        }
 
         view.load(R.raw.sample)
     }

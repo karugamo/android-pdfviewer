@@ -1,6 +1,9 @@
 package com.danjdt.pdfviewer.view.adapter
 
 import android.graphics.Bitmap
+import android.graphics.Paint
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RectShape
 import android.view.View
 import android.widget.ImageView
 import com.danjdt.pdfviewer.R
@@ -27,6 +30,14 @@ class DefaultPdfPageViewHolder(
                 imageView.layoutParams.height =  (page.height.toDouble() * imageView.width / page.width).toInt()
                 println("imageView.set with bitmap ${page.height}/${page.width}")
                 imageView.setImageBitmap(page)
+
+                val borderSize = 10 // Adjust border size as needed
+                val borderColor = 0xFFFF0000.toInt() // Red color
+                val borderDrawable = ShapeDrawable(RectShape())
+                borderDrawable.paint.color = borderColor
+                borderDrawable.paint.strokeWidth = borderSize.toFloat()
+                borderDrawable.paint.style = Paint.Style.STROKE
+                imageView.background = borderDrawable
             }
         }
     }

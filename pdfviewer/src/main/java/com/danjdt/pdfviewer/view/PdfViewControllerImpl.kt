@@ -28,7 +28,6 @@ class PdfViewControllerImpl(
     override fun setup(file: File) {
         file.deleteOnExit()
         view.adapter = DefaultPdfPageAdapter(file, pageQuality, dispatcher, scope)
-
     }
 
     override fun setZoomEnabled(isZoomEnabled: Boolean) {
