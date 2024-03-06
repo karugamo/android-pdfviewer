@@ -1,9 +1,11 @@
 package com.danjdt.pdfviewer.view.adapter
 
-import android.graphics.Bitmap
+
 import android.view.View
-import android.widget.ImageView
+import android.widget.TextView
 import com.danjdt.pdfviewer.R
+
+import com.danjdt.pdfviewer.view.adapter.PdfPageViewHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -12,21 +14,30 @@ import kotlinx.coroutines.launch
 class DefaultPdfPageViewHolder(
     view: View,
     private val scope: CoroutineScope,
-    private val renderBlock: suspend (position: Int) -> Result<Bitmap>,
+    private val renderBlock: suspend (position: Int) -> Result<String>,
 ) : PdfPageViewHolder(view) {
-    private val imageView: ImageView = itemView.findViewById(R.id.image)
+    private val textView: TextView = itemView.findViewById(R.id.text)
 
     private var renderJob: Job? = null
 
     override fun bind(position: Int) {
         renderJob?.cancel()
         renderJob = scope.launch {
-            val renderResult = renderBlock(position)
-            ensureActive()
-            renderResult.onSuccess { page ->
-                imageView.layoutParams.height =  (page.height.toDouble() * imageView.width / page.width).toInt()
-                println("imageView.set with bitmap ${page.height}/${page.width}")
-                imageView.setImageBitmap(page)
+            try {
+                val renderResult = renderBlock(position)
+                ensureActive()
+                renderResult.onSuccess { textContent ->
+                    textView.text = textContent
+                }
+                renderResult.onFailure { error ->
+                    println("Failed to render text at position $position: $error")
+                    // Handle failure gracefully, for example, show a placeholder text
+                    // textView.text = "Error loading content"
+                }
+            } catch (e: Exception) {
+                println("Exception occurred while rendering text at position $position: $e")
+                // Handle exception gracefully, for example, show a placeholder text
+                // textView.text = "Error loading content"
             }
         }
     }

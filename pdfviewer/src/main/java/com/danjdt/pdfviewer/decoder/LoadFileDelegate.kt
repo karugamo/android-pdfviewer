@@ -7,16 +7,19 @@ import java.io.InputStream
 class LoadFileDelegate(private val input: InputStream, private val file: File) {
 
     fun doLoadFile(): File {
-        val output = FileOutputStream(file)
-        val buffer = ByteArray(BUFFER_SIZE)
-        var read: Int = input.read(buffer)
+        input.use { input ->
+            FileOutputStream(file).use { output ->
+                val buffer = ByteArray(BUFFER_SIZE)
+                var read: Int = input.read(buffer)
 
-        while ((read) != -1) {
-            output.write(buffer, 0, read)
-            read = input.read(buffer)
+                while (read != -1) {
+                    output.write(buffer, 0, read)
+                    read = input.read(buffer)
+                }
+
+                output.flush()
+            }
         }
-
-        output.flush()
         return file
     }
 

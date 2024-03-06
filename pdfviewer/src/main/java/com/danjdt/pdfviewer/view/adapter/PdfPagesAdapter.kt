@@ -18,9 +18,10 @@ abstract class PdfPagesAdapter<T : PdfPageViewHolder>(
         PdfPageRenderer(pdfFile, quality, dispatcher)
     }
 
-    suspend fun renderPage(position: Int): Result<Bitmap> {
+    suspend fun renderPage(position: Int): Result<String> {
         println("renderPage($position)")
-        return pdfPageRenderer.render(position)
+//        return pdfPageRenderer.render(position)
+        return Result.success("renderpage");
     }
 
     override fun getItemCount(): Int {

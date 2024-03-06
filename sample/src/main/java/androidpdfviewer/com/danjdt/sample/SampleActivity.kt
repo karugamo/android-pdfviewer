@@ -3,6 +3,8 @@ package androidpdfviewer.com.danjdt.sample
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.StrictMode
+import android.os.StrictMode.VmPolicy
 import android.view.Menu
 import android.view.MenuItem
 import androidpdfviewer.com.danjdt.sample.databinding.ActivityMainBinding
@@ -13,8 +15,6 @@ import com.danjdt.pdfviewer.interfaces.OnErrorListener
 import com.danjdt.pdfviewer.interfaces.OnPageChangedListener
 import com.danjdt.pdfviewer.utils.PdfPageQuality
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.io.IOException
 
 
@@ -23,6 +23,12 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        StrictMode.setVmPolicy(
+            VmPolicy.Builder(StrictMode.getVmPolicy())
+                .detectLeakedClosableObjects()
+                .build()
+        )
+
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -38,12 +44,12 @@ class SampleActivity : AppCompatActivity(), OnPageChangedListener , OnErrorListe
             .build()
 
 
-        lifecycleScope.launch {
-            delay(200)
-            view.viewController.goToPosition(10)
-            delay(300) // Asynchronous delay that does not block the main thread
-            view.viewController.goToPosition(0)
-        }
+//        lifecycleScope.launch {
+//            delay(200)
+//            view.viewController.goToPosition(10)
+//            delay(300) // Asynchronous delay that does not block the main thread
+//            view.viewController.goToPosition(0)
+//        }
 
         view.load(R.raw.sample)
     }

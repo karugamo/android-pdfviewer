@@ -19,25 +19,32 @@ class PdfViewControllerImpl(
     private val scope: CoroutineScope,
 ) : PdfViewController {
 
-    private var view: ZoomableRecyclerView = ZoomableRecyclerView(context)
+    private var view: RecyclerView = RecyclerView(context)
     private var pageQuality: PdfPageQuality = PdfPageQuality.QUALITY_1080
     private var onPageChangedListener: OnPageChangedListener? = null
     private var dispatcher: CoroutineDispatcher = Dispatchers.IO
     private var lastVisiblePosition = -1
 
     override fun setup(file: File) {
+        println("PdfViewControllerImpl, Setting up with file: ${file.path}")
         file.deleteOnExit()
+
         view.adapter = DefaultPdfPageAdapter(file, pageQuality, dispatcher, scope)
+
+        val layoutM = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+        layoutM.isItemPrefetchEnabled = true
+        layoutM.initialPrefetchItemCount = 100
+        view.layoutManager = layoutM
+
+        println("PdfViewControllerImpl, Adapter and LayoutManager set")
 
     }
 
     override fun setZoomEnabled(isZoomEnabled: Boolean) {
-        view.isZoomEnabled = isZoomEnabled
         view.addOnScrollListener(onScrollListener)
     }
 
     override fun setMaxZoom(maxZoom: Float) {
-        view.maxZoom = maxZoom
     }
 
     override fun setQuality(quality: PdfPageQuality) {
@@ -63,17 +70,17 @@ class PdfViewControllerImpl(
     override fun getView(): View = view
 
     private val onScrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-            val position =
-                (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
-            if (position != lastVisiblePosition && position != -1) {
-                lastVisiblePosition = position
-                onPageChangedListener?.onPageChanged(
-                    page = lastVisiblePosition + 1,
-                    total = recyclerView.adapter?.itemCount ?: 0
-                )
-            }
-        }
+//        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//            super.onScrolled(recyclerView, dx, dy)
+//            val position =
+//                (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+//            if (position != lastVisiblePosition && position != -1) {
+//                lastVisiblePosition = position
+//                onPageChangedListener?.onPageChanged(
+//                    page = lastVisiblePosition + 1,
+//                    total = recyclerView.adapter?.itemCount ?: 0
+//                )
+//            }
+//        }
     }
 }
